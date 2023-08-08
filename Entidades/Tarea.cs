@@ -13,5 +13,6 @@ namespace TareasMVC.Entidades
         public DateTime FechaCreacion { get; set; }
         //propiedad de navegacion, obteniendo el detalle o los registros hijos
         public List<Paso> Pasos { get; set; }
+        public List<ArchivoAdjunto> ArchivosAdjuntos { get; set; }
     }
 }
