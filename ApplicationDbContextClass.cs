@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TareasMVC.Entidades;
 
 namespace TareasMVC
 {
-    public class ApplicationDbContextClass : DbContext
+    public class ApplicationDbContextClass : IdentityDbContext
     {
         public ApplicationDbContextClass(DbContextOptions options) : base(options)
         {

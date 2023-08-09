@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TareasMVC;
 
@@ -7,6 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContextClass>(opciones => 
     opciones.UseSqlServer("name=DefaultConnection"));
+
+//configuracion de identity
+builder.Services.AddAuthentication();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(opciones =>
+{
+    opciones.SignIn.RequireConfirmedAccount = false;
+}).AddEntityFrameworkStores<ApplicationDbContextClass>()
+.AddDefaultTokenProviders();
+// la autenticacion y uso de los formularios propios, mas no de los de identity
+builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, opciones =>
+{
+    opciones.LogoutPath = "/usuarios/login";
+    opciones.AccessDeniedPath = "/usuarios/login";
+});
 
 var app = builder.Build();
 
@@ -23,6 +39,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
