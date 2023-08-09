@@ -1,12 +1,28 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using TareasMVC;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//creamos la politica de autorizacion, esto para aplicar el atributo [Authorize] a todos los controladores
+var politicaUsuariosAutenticados = new AuthorizationPolicyBuilder()
+    //requreriremos la auternticacion de los usuarios
+    .RequireAuthenticatedUser()
+    //construiremos la politica de autenticacion de usuarios
+    .Build();
+
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(opciones =>
+{
+    //buscamos la opcion de filtro
+    opciones.Filters
+    //agregamos la politica que cosntruimos
+        .Add(new AuthorizeFilter(politicaUsuariosAutenticados));
+});
+
 builder.Services.AddDbContext<ApplicationDbContextClass>(opciones => 
     opciones.UseSqlServer("name=DefaultConnection"));
 
