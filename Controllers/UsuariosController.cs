@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TareasMVC.Migrations;
@@ -58,6 +59,49 @@ namespace TareasMVC.Controllers
                 }
                 return View(model);
             }
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel modelo)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(modelo);
+            }
+
+            var respuesta = await signInManager.PasswordSignInAsync(modelo.Email, 
+                modelo.Password, 
+                modelo.Recuerdame,
+                //lockoutOnFailure, si el usuario se equivoca muchas veces en ingresar, se le bloqueara, pero en este caso indicaremso que no
+                lockoutOnFailure: false);
+
+            if (respuesta.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty,
+                    "Nombre de usuario o password incorrecto");
+                return View(modelo);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            //para slair le pasamos el esquema de identity
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            //return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login");
         }
     }
 }
