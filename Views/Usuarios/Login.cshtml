@@ -5,6 +5,14 @@
 
 <h1>Login</h1>
 
+@* agregamos el error del proveedor externo *@
+@if (ViewData.Keys.Contains("mensaje"))
+{
+    <p style="color: red">
+        @ViewData["mensaje"]
+    </p>
+}
+
 @*<hr />*@
 <div class="card">
     <div class="card-body">
