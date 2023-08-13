@@ -142,7 +142,8 @@ namespace TareasMVC.Controllers
             string remoteError = null)
         {
             //le enviamos al root de la aplicacion, en caso de ser nula
-            urlRetorno = urlRetorno ?? Url.Content("~/");
+            //urlRetorno = urlRetorno ?? Url.Content("~/");
+            urlRetorno = urlRetorno ?? Url.Content("~/Home/Index");
             //variable para mostrarle al usuario
             var mensaje = "";
             if (remoteError is not null)

@@ -27,7 +27,13 @@ builder.Services.AddDbContext<ApplicationDbContextClass>(opciones =>
     opciones.UseSqlServer("name=DefaultConnection"));
 
 //configuracion de identity
-builder.Services.AddAuthentication();
+builder.Services.AddAuthentication()
+    //adicionamos, el login usando una cuenta en Microsoft, pasandole el clientid y el secretId
+    .AddMicrosoftAccount(opciones =>
+    {
+        opciones.ClientId = builder.Configuration["MicrosoftClientId"];
+        opciones.ClientSecret = builder.Configuration["MicrosoftSecretId"];
+    });
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(opciones =>
 {
     opciones.SignIn.RequireConfirmedAccount = false;
@@ -60,6 +66,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=usuarios}/{action=login}/{id?}");
 
 app.Run();
