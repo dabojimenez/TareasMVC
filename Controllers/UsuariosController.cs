@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TareasMVC.Migrations;
 using TareasMVC.Models;
+using TareasMVC.Servicios;
 
 namespace TareasMVC.Controllers
 {
@@ -240,6 +241,42 @@ namespace TareasMVC.Controllers
             modelo.Mensaje = mensaje;
 
             return View(modelo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> HacerAdmin(string email)
+        {
+            var usuario = await applicationDbContextClass.Users
+                .Where(u => u.Email == email)
+                .FirstOrDefaultAsync();
+
+            if (usuario is null)
+            {
+                return NotFound();
+            }
+            //agregamos el rol a la tabla, pasnaodle el usuario y el tipo de rol
+            await userManager.AddToRoleAsync(usuario, Constantes.RolAdmin);
+
+            //retornamos al routeo d ela vista, el mensaje, indicando la accion que fue de forma exitosa
+            return RedirectToAction("Listado", routeValues: new {mensaje = "Rol asignado correctamente a "+ email});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoverAdmin(string email)
+        {
+            var usuario = await applicationDbContextClass.Users
+                .Where(u => u.Email == email)
+                .FirstOrDefaultAsync();
+
+            if (usuario is null)
+            {
+                return NotFound();
+            }
+            //removemos el rol a la tabla, pasnaodle el usuario y el tipo de rol
+            await userManager.RemoveFromRoleAsync(usuario, Constantes.RolAdmin);
+
+            //retornamos al routeo d ela vista, el mensaje, indicando la accion que fue de forma exitosa
+            return RedirectToAction("Listado", routeValues: new { mensaje = "Rol removido correctamente a " + email });
         }
     }
 }
