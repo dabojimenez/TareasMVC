@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using TareasMVC.Servicios;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -22,9 +23,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Listado">Listado de Usuarios</a>
-                        </li>
+                        @* agregamos esta validacion de usuario, con el rol de tipo admin 
+                            si en caso si es de tipo admin, mostraremos ene l layout el boton de listado de usuarios
+                        IsInRole, es la funcion que pasamos como parametro el string a validar
+                        *@
+                        @if (User.IsInRole(Constantes.RolAdmin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios" asp-action="Listado">Listado de Usuarios</a>
+                            </li>
+                        }
+
                     </ul>
                     @* agregamos los links de login, que creamos en una vista parcial *@
                     <partial name="_LinksLogin" />

@@ -225,6 +225,8 @@ namespace TareasMVC.Controllers
         }
 
         [HttpGet]
+        //agregamos la siguiente validacion, para que aunq coloque la direccion en el navegador, no podra ingresar
+        [Authorize(Roles = Constantes.RolAdmin)]
         public async Task<IActionResult> Listado(string mensaje = null)
         {
             //realizamos un query, pero usaremos dbcontext que creamos. Solo traemos el email
@@ -244,6 +246,7 @@ namespace TareasMVC.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Constantes.RolAdmin)]
         public async Task<IActionResult> HacerAdmin(string email)
         {
             var usuario = await applicationDbContextClass.Users
@@ -262,6 +265,7 @@ namespace TareasMVC.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Constantes.RolAdmin)]
         public async Task<IActionResult> RemoverAdmin(string email)
         {
             var usuario = await applicationDbContextClass.Users
