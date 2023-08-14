@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TareasMVC.Migrations;
 using TareasMVC.Models;
@@ -12,11 +13,15 @@ namespace TareasMVC.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
+        private readonly ApplicationDbContextClass applicationDbContextClass;
+
         public UsuariosController(UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ApplicationDbContextClass applicationDbContextClass)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.applicationDbContextClass = applicationDbContextClass;
         }
 
         [AllowAnonymous]
@@ -216,6 +221,25 @@ namespace TareasMVC.Controllers
             //si no fue exitosa la creacion, mostraemso un mensaje
             mensaje = "Ha ocurrido un error agregando el Login";
             return RedirectToAction("login", routeValues: new { mensaje });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Listado(string mensaje = null)
+        {
+            //realizamos un query, pero usaremos dbcontext que creamos. Solo traemos el email
+            var usuarios = await applicationDbContextClass.Users
+                //proyectamos, los valores obtenidos en (u), proyectamos a una nueva clase de UsuarioViewModel
+                .Select(u => new UsuarioViewModel
+                {
+                    Email = u.Email,
+                })
+                .ToListAsync();
+
+            var modelo = new UsuarioListaViewModel();
+            modelo.Usuarios = usuarios;
+            modelo.Mensaje = mensaje;
+
+            return View(modelo);
         }
     }
 }
