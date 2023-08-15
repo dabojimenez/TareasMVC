@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace TareasMVC.Entidades
 {
@@ -11,6 +12,12 @@ namespace TareasMVC.Entidades
         public string Descripcion { get; set; }
         public int Orden { get; set; }
         public DateTime FechaCreacion { get; set; }
+        //agregamos la llaveforanea, agregando la relacion entre tarea y usuario
+        //creamos el id, del usuario que a creado la tarea
+        public string UsuarioCreacionId { get; set; }
+        //adicionamos, la propiedad de navegacion de identityuser
+        public IdentityUser UsuarioCreacion { get; set; }
+
         //propiedad de navegacion, obteniendo el detalle o los registros hijos
         public List<Paso> Pasos { get; set; }
         public List<ArchivoAdjunto> ArchivosAdjuntos { get; set; }
