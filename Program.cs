@@ -46,6 +46,9 @@ builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.Ap
     opciones.AccessDeniedPath = "/usuarios/login";
 });
 
+//haremos uso de IStringLocalizer
+builder.Services.AddLocalization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
