@@ -49,7 +49,11 @@ builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.Ap
 });
 
 //haremos uso de IStringLocalizer
-builder.Services.AddLocalization();
+builder.Services.AddLocalization( opciones =>
+{
+    //agregamos el archivo de recursos, que creamos
+    opciones.ResourcesPath = "Recursos";
+});
 
 var app = builder.Build();
 
