@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using TareasMVC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,6 +52,18 @@ builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.Ap
 builder.Services.AddLocalization();
 
 var app = builder.Build();
+
+//agregando las culturas soportadas, es espanol y en ingles
+var culturasUISoportadas = new[] { "es", "en" };
+//le pasamos las culturas que hemos definidas a soportar
+app.UseRequestLocalization(opciones =>
+{
+    //agregamos la cultura soportada por defecto
+    opciones.DefaultRequestCulture = new RequestCulture("es");
+    //ahora convertiremso nuestro arreglo de culturas soportadas, a una lista, la cual proyectaremos a cultura informacion
+    opciones.SupportedUICultures = culturasUISoportadas.Select( cultura => new CultureInfo(cultura))
+                                    .ToList();
+});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
