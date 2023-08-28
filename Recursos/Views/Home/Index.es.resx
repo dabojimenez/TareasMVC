@@ -118,9 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Aprende más" xml:space="preserve">
-    <value>Learn about &lt;a href="https://docs.microsoft.com/aspnet/core"&gt;building Web apps with ASP.NET Core&lt;/a&gt;.</value>
-  </data>
-  <data name="Bienvenido" xml:space="preserve">
-    <value>Welcom</value>
+    <value>Aprende acerca de &lt;a href=\"https://docs.microsoft.com/aspnet/core\"&gt;construir aplicaciones web con ASP .Net Core&lt;/a&gt;.</value>
   </data>
 </root>
