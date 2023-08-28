@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using TareasMVC;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,9 @@ builder.Services.AddControllersWithViews(opciones =>
     opciones.Filters
     //agregamos la politica que cosntruimos
         .Add(new AuthorizeFilter(politicaUsuariosAutenticados));
-});
+})
+    //AddViewLocalization, esto nos ayudara a traducir las paginas de html
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
 
 builder.Services.AddDbContext<ApplicationDbContextClass>(opciones => 
     opciones.UseSqlServer("name=DefaultConnection"));

@@ -1,10 +1,13 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@* inyectamos IViewLocalizer, para poder tradur la pagina, adicionalmente debemos importar la directiva *@
+@inject IViewLocalizer localizer;
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">@localizer["Bienvenido"]</h1>
+    <p>@localizer["Aprende acerca de <a href=\"https://docs.microsoft.com/aspnet/core\">construir aplicaciones web con ASP .Net Core</a>."]</p>
 </div>
 
 <div>
