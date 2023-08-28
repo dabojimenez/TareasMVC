@@ -25,8 +25,16 @@ builder.Services.AddControllersWithViews(opciones =>
     //agregamos la politica que cosntruimos
         .Add(new AuthorizeFilter(politicaUsuariosAutenticados));
 })
-    //AddViewLocalization, esto nos ayudara a traducir las paginas de html
-    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
+//AddViewLocalization, esto nos ayudara a traducir las paginas de html
+.AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+//la siguiente linea es para el uso compartido de los mensjaes en distintos idiomas, pero usando los dataanotations
+.AddDataAnnotationsLocalization(opciones =>
+{
+    //tecnica, que nos permitira utilizar un unico archivo de recursos para traducir las anotaciones de datos
+    //(_)descartamos el tipo
+    opciones.DataAnnotationLocalizerProvider = (_, factoria) =>
+        factoria.Create(typeof(RecursoCompartido));
+});
 
 builder.Services.AddDbContext<ApplicationDbContextClass>(opciones => 
     opciones.UseSqlServer("name=DefaultConnection"));
