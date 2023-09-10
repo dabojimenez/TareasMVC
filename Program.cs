@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using TareasMVC;
 using Microsoft.AspNetCore.Mvc.Razor;
+using TareasMVC.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +37,7 @@ builder.Services.AddControllersWithViews(opciones =>
         factoria.Create(typeof(RecursoCompartido));
 });
 
-builder.Services.AddDbContext<ApplicationDbContextClass>(opciones => 
+builder.Services.AddDbContext<ApplicationDbContextClass>(opciones =>
     opciones.UseSqlServer("name=DefaultConnection"));
 
 //configuracion de identity
@@ -60,7 +61,7 @@ builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.Ap
 });
 
 //haremos uso de IStringLocalizer
-builder.Services.AddLocalization( opciones =>
+builder.Services.AddLocalization(opciones =>
 {
     //agregamos el archivo de recursos, que creamos
     opciones.ResourcesPath = "Recursos";
@@ -69,14 +70,19 @@ builder.Services.AddLocalization( opciones =>
 var app = builder.Build();
 
 //agregando las culturas soportadas, es espanol y en ingles
-var culturasUISoportadas = new[] { "es", "en" };
+//var culturasUISoportadas = new[] { "es", "en" };
+
+
 //le pasamos las culturas que hemos definidas a soportar
 app.UseRequestLocalization(opciones =>
 {
     //agregamos la cultura soportada por defecto
     opciones.DefaultRequestCulture = new RequestCulture("es");
     //ahora convertiremso nuestro arreglo de culturas soportadas, a una lista, la cual proyectaremos a cultura informacion
-    opciones.SupportedUICultures = culturasUISoportadas.Select( cultura => new CultureInfo(cultura))
+    //opciones.SupportedUICultures = culturasUISoportadas.Select(cultura => new CultureInfo(cultura))
+    //                                .ToList();
+    //ahora que cremaos en la clase Constantes el modelo de espanol e ingles aplicamos aqui
+    opciones.SupportedUICultures = Constantes.CulturasSoportadas .Select(cultura => new CultureInfo(cultura.Value))
                                     .ToList();
 });
 

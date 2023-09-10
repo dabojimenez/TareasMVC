@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System.Diagnostics;
 using TareasMVC.Models;
@@ -24,9 +25,19 @@ namespace TareasMVC.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        public IActionResult CambiarIdioma(string cultura, string urlRetorno)
+        
         {
-            return View();
+            //agregamos la cooki
+            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(cultura)),
+                new CookieOptions
+                {
+                    //agregamos 4 anos de expiracion
+                    Expires = DateTimeOffset.UtcNow.AddYears(5),
+                });
+            return LocalRedirect(urlRetorno);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

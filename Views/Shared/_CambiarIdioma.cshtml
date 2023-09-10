@@ -1,0 +1,25 @@
+﻿@using Microsoft.AspNetCore.Localization;
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using TareasMVC.Servicios;
+@inject IViewLocalizer localizer;
+
+@{
+    //obtenemos el idioma en el cual esta nuestra aplicacion
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    //agregamos una url de retorno
+    var urlRetorno = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
+}
+@* CambiarIdioma, sera la accion que creara una cooki con el idioma seleccionado por el usuario *@
+<form asp-controller="Home" asp-action="CambiarIdioma"
+      asp-route-urlRetorno="@urlRetorno" method="post"
+      class="form-horizontal" role="form" style="display: inline">
+    <label>@localizer["Idioma:"]</label>
+    @* requestCulture.RequestCulture.UICulture.Name, cultura ya seleccioanda por el usuario *@
+    @* (onchange="this.form.submit()"), Hacemos que se poste el formulario al cambiar el valor de la seleccion*@
+    <select name="cultura"
+            asp-for="@requestCulture.RequestCulture.UICulture.Name" 
+            id="cultura"
+            onchange="this.form.submit()"
+            asp-items="Constantes.CulturasSoportadas">
+    </select>
+</form>
