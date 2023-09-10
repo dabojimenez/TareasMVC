@@ -22,6 +22,10 @@
     <script src="~/js/utilidades.js"></script>
 } *@
 
+@{
+    ViewData["Title"] = "Listado de tareas";
+}
+
 <div class="text-center">
     <h1 class="display-4">
         @localizer["Mis tareas"]
@@ -38,6 +42,13 @@
             </div>
         </div>
     </div>
+
+    @* animacion de cargando la data*@
+    <div data-bind="visible: cargando" class="spinner-border">
+        <span class="visually-hidden">
+            Cargando...
+        </span>
+    </div>
 </div>
 
 @section Scripts{
@@ -50,12 +61,24 @@
             //y se actualizara de forma automaticamente, ya que es un observableArray, y reaccionara a la
             //propiedad tareas, a cualqueir cambio que ocurra en tareas
             tareas: ko.observableArray([
-                { titulo: 'Tarea 1' },
-                { titulo: 'Tarea 2' },
-                { titulo: 'Tarea 3' },
-                { titulo: 'Tarea 4' },
-            ])
+                // { titulo: 'Tarea 1' },
+                // { titulo: 'Tarea 2' },
+                // { titulo: 'Tarea 3' },
+                // { titulo: 'Tarea 4' },
+            ]),
+            //creamos una propiedad para ver si estamso cargando o no
+            //observable, sera un simple valor en este caso un boleano
+            cargando: ko.observable(true)
         }
+
+        //ejecutamos una tarea depsues de un tiempo
+        setTimeout(() => {
+            //se ejecutara luego de 2 segundos lo que este dentro de los corchetes
+            tareaListadoViewModel.tareas.push({ titulo: 'Tarea titulo push' });
+            //actualizamos un observable
+            tareaListadoViewModel.cargando(false)
+        }, 2000)
+
         //aplicamos KNOCKOUTJS en la vista html usanod el id, debemos usar la palabra reservada
         //ko, que invoca a KNOCKOUTJS
         ko.applyBindings(tareaListadoViewModel, document.getElementById('contenedor-listado-tareas'))
