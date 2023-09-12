@@ -49,38 +49,60 @@
             Cargando...
         </span>
     </div>
+
+    @* mensaje al no existir tareas en el arreglo *@
+    <div data-bind="visible: noHayTareas">
+        No existen tareas para mostrar
+    </div>
 </div>
 
 @section Scripts{
     <script>
         // asiganamos un objeto a la varibales, y este objeto tiene su propiedad llamada tareas
         //la cual le estamos asiganndo un observable, que es un arreglo
-        const tareaListadoViewModel = {
-            //con observableArray, estamos diciendo que los cambios que ocurran en esta propiedad se van a reflejar
-            //en la interfas grafica de la aplicacion
-            //y se actualizara de forma automaticamente, ya que es un observableArray, y reaccionara a la
-            //propiedad tareas, a cualqueir cambio que ocurra en tareas
-            tareas: ko.observableArray([
-                // { titulo: 'Tarea 1' },
-                // { titulo: 'Tarea 2' },
-                // { titulo: 'Tarea 3' },
-                // { titulo: 'Tarea 4' },
-            ]),
-            //creamos una propiedad para ver si estamso cargando o no
-            //observable, sera un simple valor en este caso un boleano
-            cargando: ko.observable(true)
+        // const tareaListadoViewModel = {
+        //     //con observableArray, estamos diciendo que los cambios que ocurran en esta propiedad se van a reflejar
+        //     //en la interfas grafica de la aplicacion
+        //     //y se actualizara de forma automaticamente, ya que es un observableArray, y reaccionara a la
+        //     //propiedad tareas, a cualqueir cambio que ocurra en tareas
+        //     tareas: ko.observableArray([
+        //         // { titulo: 'Tarea 1' },
+        //         // { titulo: 'Tarea 2' },
+        //         // { titulo: 'Tarea 3' },
+        //         // { titulo: 'Tarea 4' },
+        //     ]),
+        //     //creamos una propiedad para ver si estamso cargando o no
+        //     //observable, sera un simple valor en este caso un boleano
+        //     cargando: ko.observable(true)
+        // }
+        function tareaListadoViewModelFn() {
+            //hacemos una refeerencia al objeto que se saca de esta funcion
+            //guardamos la referencia en self (yomismo)
+            var self = this;
+            self.tareas = ko.observableArray([]);
+            self.cargando = ko.observable(true);
+            // usaremos una funcion AudioParam indicar queueMicrotask no hay tareas
+            self.noHayTareas = ko.pureComputed(function () {
+                if (self.cargando()) {
+                    return false;
+                }
+                //verificamos si existe longitud o registros
+                return self.tareas().length === 0;
+            })
         }
+
+        const tareasListadoViewModel = new tareaListadoViewModelFn();
 
         //ejecutamos una tarea depsues de un tiempo
         setTimeout(() => {
             //se ejecutara luego de 2 segundos lo que este dentro de los corchetes
-            tareaListadoViewModel.tareas.push({ titulo: 'Tarea titulo push' });
+            tareasListadoViewModel.tareas.push({ titulo: 'Tarea titulo push' });
             //actualizamos un observable
-            tareaListadoViewModel.cargando(false)
+            tareasListadoViewModel.cargando(false)
         }, 2000)
 
         //aplicamos KNOCKOUTJS en la vista html usanod el id, debemos usar la palabra reservada
         //ko, que invoca a KNOCKOUTJS
-        ko.applyBindings(tareaListadoViewModel, document.getElementById('contenedor-listado-tareas'))
+        ko.applyBindings(tareasListadoViewModel, document.getElementById('contenedor-listado-tareas'))
     </script>
 }
