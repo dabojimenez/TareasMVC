@@ -2,23 +2,6 @@
 @* inyectamos IViewLocalizer, para poder tradur la pagina, adicionalmente debemos importar la directiva *@
 @inject IViewLocalizer localizer;
 
-@* <div class="text-center">
-    <h1 class="display-4">@localizer["Bienvenido"]</h1>
-    <p>@localizer["Aprende más"]</p>
-</div> *@
-
-@* <div>
-    <h3>@ViewBag.Saludo, David</h3>
-</div> *@
-
-@* <button onclick="mostrarError()">
-    Mostrar mensaje
-</button> *@
-
-@* @section Scripts{
-    <script src="~/js/utilidades.js"></script>
-} *@
-
 @{
     ViewData["Title"] = "Listado de tareas";
 }
@@ -38,15 +21,12 @@
     @* data-bind, nos permitira usar las propiedades de tareaListadoViewModel usando KNOCKOUTJS  *@
     <div class="text-start" data-bind="foreach: tareas">
         <div name="tarea" class="border mb-2 p-2" style="cursor:pointer">
-            @* tomaremos una propiedad d elos elemtnos del arreglo *@
-            <div data-bind="text: titulo, hidden: esNuevo" class="fw-bold">
+            @* tomaremos una propiedad de los elemtnos del arreglo *@
+            <div data-bind="text: titulo, hidden: true" class="fw-bold">
             </div>
 
-            @* data-bind="value: titulo", al actyualziar el textbox actualizamos el objeto de js tambien *@
-            @* focusout, evento que al quitarle el focus de la caja de texto se ejecute la funcion *@
             <input type="text" name="titulo-tarea" autocomplete="off"
-                   data-bind="value: titulo, visible: esNuevo,
-                    event: {focusout: manejarFocusoutTituloTarea}" />
+                   data-bind="value: titulo, visible: true, event: {focusout: manejarFocusoutTituloTarea}"/>
         </div>
     </div>
 
@@ -67,10 +47,12 @@
     @* //importamos la funcion que agrega la tarea usando javascript *@
     @* asp-append-version="true", para que siempre se actualice *@
 
-    <script src="~/js/tareas.js" asp-append-version="true">
-    </script>
+    <script src="~/js/tareas.js" asp-append-version="true"></script>
 
     <script>
+        //agregamos la direccion url
+        const urlTareas = "api/Tareas";
+
         // asiganamos un objeto a la varibales, y este objeto tiene su propiedad llamada tareas
         //la cual le estamos asiganndo un observable, que es un arreglo
         // const tareaListadoViewModel = {
@@ -102,31 +84,31 @@
                 //verificamos si existe longitud o registros
                 return self.tareas().length === 0;
             })
-        }
+        };
 
         function tareaElementoListadoViewModel({ id, titulo }) {
             var self = this;
             self.id = ko.observable(id);
             self.titulo = ko.observable(titulo);
+            // self.esNuevo = ko.observable(true);
             self.esNuevo = ko.pureComputed(function () {
-                return self.id() == 0;
+                return self.titulo() == 1;
             })
-        }
+        };
 
-        const tareasListadoViewModel = new tareaListadoViewModelFn();
+        const tareaListadoViewModel = new tareaListadoViewModelFn();
 
         //ejecutamos una tarea depsues de un tiempo
         setTimeout(() => {
             //se ejecutara luego de 2 segundos lo que este dentro de los corchetes
             // tareasListadoViewModel.tareas.push({ titulo: 'Tarea titulo push' });
-            //actualizamos un observable 
-            tareasListadoViewModel.cargando(false)
+            //actualizamos un observable
+            tareaListadoViewModel.cargando(false)
         }, 100)
 
         //aplicamos KNOCKOUTJS en la vista html usanod el id, debemos usar la palabra reservada
         //ko, que invoca a KNOCKOUTJS
-        ko.applyBindings(tareasListadoViewModel, document.getElementById('contenedor-listado-tareas'))
+        ko.applyBindings(tareaListadoViewModel, document.getElementById('contenedor-listado-tareas'));
     </script>
-
     
 }

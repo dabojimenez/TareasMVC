@@ -67,6 +67,8 @@ builder.Services.AddLocalization(opciones =>
     opciones.ResourcesPath = "Recursos";
 });
 
+builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
+
 var app = builder.Build();
 
 //agregando las culturas soportadas, es espanol y en ingles
