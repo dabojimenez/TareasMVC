@@ -1,6 +1,6 @@
 ﻿function agregarNuevaTareaAlListado() {
     tareaListadoViewModel.tareas.push(
-        tareaElementoListadoViewModel({ id: 0, titulo: '478' })
+        tareaElementoListadoViewModel({ id: 0, titulo: '' })
     );
 }
 
@@ -9,17 +9,6 @@ function agregarTarea(tarea) {
 }
 
 async function manejarFocusoutTituloTarea(tarea) {
-    console.log(tarea);
-
-    //// Verificar si tarea está definido y tiene la propiedad 'titulo'
-    //if (tarea && tarea.titulo) {
-    //    const titulo = tarea.titulo();
-    //    // Resto del código...
-    //} else {
-    //    // Manejar el caso en el que tarea no está definido o no tiene 'titulo'
-    //    console.error('El objeto tarea no está definido o no tiene la propiedad titulo.');
-    //}
-
     const titulo = tarea.titulo();
     //const titulo = 'QUEMADO';
     //si no escribio nada se le mostrara
