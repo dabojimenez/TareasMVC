@@ -1,6 +1,6 @@
 ﻿function agregarNuevaTareaAlListado() {
     tareaListadoViewModel.tareas.push(
-        tareaElementoListadoViewModel({ id: 0, titulo: '' })
+        new tareaElementoListadoViewModel({ id: 0, titulo: '' })
     );
 }
 
@@ -10,7 +10,7 @@ function agregarTarea(tarea) {
 
 async function manejarFocusoutTituloTarea(tarea) {
     const titulo = tarea.titulo();
-    //const titulo = 'QUEMADO';
+
     //si no escribio nada se le mostrara
     if (!titulo) {
         //removemso el ultimo elemento
@@ -37,5 +37,6 @@ async function manejarFocusoutTituloTarea(tarea) {
         tarea.id(json.id);
     } else {
         //mostrar mensaje de error
+        console.log(respuesta);
     }
 }

@@ -22,11 +22,11 @@
     <div class="text-start" data-bind="foreach: tareas">
         <div name="tarea" class="border mb-2 p-2" style="cursor:pointer">
             @* tomaremos una propiedad de los elemtnos del arreglo *@
-            <div data-bind="text: titulo, hidden: true" class="fw-bold">
+            <div data-bind="text: titulo, hidden: esNuevo" class="fw-bold">
             </div>
 
             <input type="text" name="titulo-tarea" autocomplete="off"
-                   data-bind="value: titulo, visible: true, event: {focusout: manejarFocusoutTituloTarea}"/>
+                   data-bind="value: titulo, visible: esNuevo, event: {focusout: manejarFocusoutTituloTarea}" />
         </div>
     </div>
 
@@ -51,7 +51,7 @@
 
     <script>
         //agregamos la direccion url
-        const urlTareas = "api/Tareas";
+        const urlTareas = "/api/Tareas";
 
         // asiganamos un objeto a la varibales, y este objeto tiene su propiedad llamada tareas
         //la cual le estamos asiganndo un observable, que es un arreglo
@@ -90,9 +90,8 @@
             var self = this;
             self.id = ko.observable(id);
             self.titulo = ko.observable(titulo);
-            // self.esNuevo = ko.observable(true);
             self.esNuevo = ko.pureComputed(function () {
-                return self.titulo() == 1;
+                return self.id() == 0;
             })
         };
 
