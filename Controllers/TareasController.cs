@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TareasMVC.Entidades;
+using TareasMVC.Models;
 using TareasMVC.Servicios;
 
 namespace TareasMVC.Controllers
@@ -20,23 +21,24 @@ namespace TareasMVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> obtenerTareas()
+        public async Task<List<TareaDTO>> obtenerTareas()
         {
             //obtenemos el usuario que esta realizando la solicitud
-            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var tareas = await context.Tareas
+            string usuarioId = servicioUsuarios.ObtenerUsuarioId();
+            List<TareaDTO> tareas = await context.Tareas
                 .Where(t => t.UsuarioCreacionId == usuarioId)
                 //ordenamos por el campo orden
                 //de forma descendente podemos usar (OrderByDescending)
                 .OrderBy(t => t.Orden)
                 //seleccionamos los campos a mostrar con select, pero es de tipo anonimo 
-                .Select(t => new
+                .Select(t => new TareaDTO
                 {
-                    t.Id,
-                    t.Titulo
+                    Id = t.Id,
+                    Titulo = t.Titulo
                 })
                 .ToListAsync();
-            return Ok(tareas);
+            //Quitamos el IActionResult, ya que e smuy peligroso, al momento de devolver la información
+            return tareas;
         }
 
         [HttpPost]
