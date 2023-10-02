@@ -19,6 +19,14 @@ namespace TareasMVC.Controllers
             this.servicioUsuarios = servicioUsuarios;
         }
 
+        [HttpGet]
+        public async Task<List<Tarea>> obtenerTareas()
+        {
+            //obtenemos el usuario que esta realizando la solicitud
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+            return await context.Tareas.Where(t => t.UsuarioCreacionId == usuarioId).ToListAsync();
+        }
+
         [HttpPost]
         public async Task<ActionResult<Tarea>> Post([FromBody] string titulo)
         {
@@ -54,5 +62,6 @@ namespace TareasMVC.Controllers
 
             return tarea;
         }
+
     }
 }

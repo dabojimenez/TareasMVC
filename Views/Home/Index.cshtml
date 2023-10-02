@@ -97,13 +97,16 @@
 
         const tareaListadoViewModel = new tareaListadoViewModelFn();
 
-        //ejecutamos una tarea depsues de un tiempo
-        setTimeout(() => {
-            //se ejecutara luego de 2 segundos lo que este dentro de los corchetes
-            // tareasListadoViewModel.tareas.push({ titulo: 'Tarea titulo push' });
-            //actualizamos un observable
-            tareaListadoViewModel.cargando(false)
-        }, 100)
+        // //ejecutamos una tarea depsues de un tiempo
+        // setTimeout(() => {
+        //     //se ejecutara luego de 2 segundos lo que este dentro de los corchetes
+        //     // tareasListadoViewModel.tareas.push({ titulo: 'Tarea titulo push' });
+        //     //actualizamos un observable
+        //     tareaListadoViewModel.cargando(false)
+        // }, 100)
+
+        //invocamos la funcion d eobtener las atreas
+        obtenerTareas();
 
         //aplicamos KNOCKOUTJS en la vista html usanod el id, debemos usar la palabra reservada
         //ko, que invoca a KNOCKOUTJS
