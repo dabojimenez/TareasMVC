@@ -20,11 +20,23 @@ namespace TareasMVC.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Tarea>> obtenerTareas()
+        public async Task<IActionResult> obtenerTareas()
         {
             //obtenemos el usuario que esta realizando la solicitud
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            return await context.Tareas.Where(t => t.UsuarioCreacionId == usuarioId).ToListAsync();
+            var tareas = await context.Tareas
+                .Where(t => t.UsuarioCreacionId == usuarioId)
+                //ordenamos por el campo orden
+                //de forma descendente podemos usar (OrderByDescending)
+                .OrderBy(t => t.Orden)
+                //seleccionamos los campos a mostrar con select, pero es de tipo anonimo 
+                .Select(t => new
+                {
+                    t.Id,
+                    t.Titulo
+                })
+                .ToListAsync();
+            return Ok(tareas);
         }
 
         [HttpPost]
