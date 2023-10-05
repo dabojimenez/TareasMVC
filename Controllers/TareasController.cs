@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TareasMVC.Entidades;
@@ -13,11 +15,14 @@ namespace TareasMVC.Controllers
     {
         private readonly ApplicationDbContextClass context;
         private readonly IServicioUsuarios servicioUsuarios;
+        private readonly IMapper mapper;
 
-        public TareasController(ApplicationDbContextClass context, IServicioUsuarios servicioUsuarios)
+        public TareasController(ApplicationDbContextClass context, IServicioUsuarios servicioUsuarios,
+            IMapper mapper)
         {
             this.context = context;
             this.servicioUsuarios = servicioUsuarios;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -30,12 +35,14 @@ namespace TareasMVC.Controllers
                 //ordenamos por el campo orden
                 //de forma descendente podemos usar (OrderByDescending)
                 .OrderBy(t => t.Orden)
-                //seleccionamos los campos a mostrar con select, pero es de tipo anonimo 
-                .Select(t => new TareaDTO
-                {
-                    Id = t.Id,
-                    Titulo = t.Titulo
-                })
+                ////seleccionamos los campos a mostrar con select, pero es de tipo anonimo 
+                //.Select(t => new TareaDTO
+                //{
+                //    Id = t.Id,
+                //    Titulo = t.Titulo
+                //})
+                //-----Usaremos AUTOMAPPER
+                .ProjectTo<TareaDTO>(mapper.ConfigurationProvider)
                 .ToListAsync();
             //Quitamos el IActionResult, ya que e smuy peligroso, al momento de devolver la información
             return tareas;

@@ -68,6 +68,8 @@ builder.Services.AddLocalization(opciones =>
 });
 
 builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
+//agrrgamos la dependencia de automaper, indicancole que trabajara sobre el poryecto/assembly sobre el proyecto en el que estamos
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
