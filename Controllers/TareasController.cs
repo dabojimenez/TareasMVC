@@ -26,7 +26,7 @@ namespace TareasMVC.Controllers
         }
 
         [HttpGet]
-        public async Task<List<TareaDTO>> obtenerTareas()
+        public async Task<ActionResult<List<TareaDTO>>> obtenerTareas()
         {
             //obtenemos el usuario que esta realizando la solicitud
             string usuarioId = servicioUsuarios.ObtenerUsuarioId();
@@ -83,6 +83,35 @@ namespace TareasMVC.Controllers
 
             return tarea;
         }
+
+        [HttpPost("ordenar")]
+        public async Task<IActionResult> Ordenar([FromBody] int[] ids)
+        {
+            var usuarioid = servicioUsuarios.ObtenerUsuarioId();
+            var tareas = await context.Tareas
+                .Where(t => t.UsuarioCreacionId == usuarioid).ToListAsync();
+            var tareasId = tareas.Select(t => t.Id);
+            //verificamso que no pertenencen al usuario
+            var idsTareasNoPertenecenAlUsuario = ids.Except(tareasId).ToList();
+            if (idsTareasNoPertenecenAlUsuario.Any())
+            {
+                //retornamos prohibido
+                return Forbid();
+            }
+            //creamos un diccionario donde la llave va hacer el id
+            var tareasDiccionario = tareas.ToDictionary(x => x.Id);
+            for (int i = 0; i < ids.Length; i++)
+            {
+                var id = ids[i];
+                var tarea = tareasDiccionario[id];
+                tarea.Orden = i + 1;
+            }
+
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
+
 
     }
 }

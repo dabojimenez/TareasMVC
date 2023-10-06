@@ -19,14 +19,16 @@
 @* estructura, donde  se mostraran las tareas*@
 <div id="contenedor-listado-tareas" class="text-center">
     @* data-bind, nos permitira usar las propiedades de tareaListadoViewModel usando KNOCKOUTJS  *@
-    <div class="text-start" data-bind="foreach: tareas">
+    <div id="reordenable" class="text-start" data-bind="foreach: tareas">
         <div name="tarea" class="border mb-2 p-2" style="cursor:pointer">
             @* tomaremos una propiedad de los elemtnos del arreglo *@
             <div data-bind="text: titulo, hidden: esNuevo" class="fw-bold">
             </div>
-
+            @* attr:{'data-id': id}, : colocamos el id de la tarea en la caja de texto*@
             <input type="text" name="titulo-tarea" autocomplete="off"
-                   data-bind="value: titulo, visible: esNuevo, event: {focusout: manejarFocusoutTituloTarea}" />
+                   data-bind="value: titulo, visible: esNuevo,
+                                attr:{'data-id': id},
+                                event: {focusout: manejarFocusoutTituloTarea}" />
         </div>
     </div>
 
@@ -47,6 +49,7 @@
     @* //importamos la funcion que agrega la tarea usando javascript *@
     @* asp-append-version="true", para que siempre se actualice *@
 
+    <script src="~/js/utilidades.js" asp-append-version="true"></script>
     <script src="~/js/tareas.js" asp-append-version="true"></script>
 
     <script>
