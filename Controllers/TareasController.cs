@@ -47,6 +47,19 @@ namespace TareasMVC.Controllers
             //Quitamos el IActionResult, ya que e smuy peligroso, al momento de devolver la información
             return tareas;
         }
+        //definimos una variable llamada id, y de tipo de dato entero
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Tarea>> Get(int id)
+        {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+            Tarea tarea = await context.Tareas.FirstOrDefaultAsync(t => t.Id == id
+                                && t.UsuarioCreacionId == usuarioId);
+            if (tarea is null)
+            {
+                return NotFound();
+            }
+            return tarea;
+        }
 
         [HttpPost]
         public async Task<ActionResult<Tarea>> Post([FromBody] string titulo)

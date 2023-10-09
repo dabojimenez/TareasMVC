@@ -20,7 +20,7 @@
 <div id="contenedor-listado-tareas" class="text-center">
     @* data-bind, nos permitira usar las propiedades de tareaListadoViewModel usando KNOCKOUTJS  *@
     <div id="reordenable" class="text-start" data-bind="foreach: tareas">
-        <div name="tarea" class="border mb-2 p-2" style="cursor:pointer">
+        <div name="tarea" class="border mb-2 p-2" style="cursor:pointer" data-bind="click: manejarClickTarea">
             @* tomaremos una propiedad de los elemtnos del arreglo *@
             <div data-bind="text: titulo, hidden: esNuevo" class="fw-bold">
             </div>
@@ -97,6 +97,13 @@
                 return self.id() == 0;
             })
         };
+
+        //crearemos un nuevo viewmodel, para poder transportar la ifnormacion d ela tarea seleccionada
+        const tareEditarViewModel = {
+            id: 0,//por defecto
+            titulo: ko.observable(''),//valor por defecto
+            descripcion: ko.observable('')
+        }
 
         const tareaListadoViewModel = new tareaListadoViewModelFn();
 

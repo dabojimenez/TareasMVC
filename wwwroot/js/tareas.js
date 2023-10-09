@@ -128,3 +128,34 @@ $(function () {
         }
     })
 })
+
+
+//funcion para obtener la tarea al dar click
+async function manejarClickTarea(tarea) {
+    //si es una tarea nueva, simplemente no ingresa
+    if (tarea.esNuevo()) {
+        return;
+    }
+    //
+    const respuesta = await fetch(
+        `${urlTareas}/${tarea.id()}`,
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    );
+
+    if (!respuesta.ok) {
+        manejoErrorApi(respuesta);
+        return;
+    }
+
+    const json = respuesta.json();
+    console.log(json);
+
+    tareEditarViewModel.id = json.id;
+    tareEditarViewModel.titulo(json.titulo);
+    tareEditarViewModel.descripcion(json.descripcion);
+}
