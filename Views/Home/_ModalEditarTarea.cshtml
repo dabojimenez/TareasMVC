@@ -11,12 +11,18 @@
                     @* una columna col-lg-9, que ocupe las tres cuartas partes del modal*@
                     <div class="col-lg-9">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="textTituloCrearTarea" placeholder="Titulo" data-bind="value: titulo"/>
+                            @* agregamos el evento  event: {change: manejarCambioEditarTarea}, en el evento change, al cambiar el valor se disparara*@
+                            <input type="text" class="form-control" 
+                            id="textTituloCrearTarea" 
+                            autocomplete="off"
+                            placeholder="Titulo" 
+                            data-bind="value: titulo, event: {change: manejarCambioEditarTarea}"/>
                             <label for="textTituloCrearTarea">Título de la tarea</label>
                         </div>
                         <div class="mb-3">
                             <label>Descripción</label>
-                            <textarea type="text" class="form-control" rows="4" data-bind="value: descripcion">
+                            <textarea type="text" class="form-control" rows="4"
+                                      data-bind="value: descripcion, event: {change: manejarCambioEditarTarea}">
 
                             </textarea>
                         </div>

@@ -117,6 +117,48 @@ async function enviarIdsTareasAlBackend(ids) {
     });
 }
 
+//funcion para modificar el cambio realizado por el usuario
+async function manejarCambioEditarTarea() {
+    const obj = {
+        id: tareEditarViewModel.id,
+        titulo: tareEditarViewModel.titulo(),
+        descripcion: tareEditarViewModel.descripcion()
+    }
+    //si la tarea no tiene titulo no le permitiremos grabar la tarea
+    if (!obj.titulo) {
+        return;
+    }
+
+    await editarTareaCompleta(obj);
+
+    //si en caso de que el web api, nos arroje un error, no se ejecutara lo siguiente
+    //findIndex, nos permtie buscar por indice
+    const indice = tareaListadoViewModel.tareas()
+        .findIndex(t => t.id() === obj.id);
+    //obtendremos la tarea en si
+    const tarea = tareaListadoViewModel.tareas()[indice];
+    //podemos modificar su titulo, en memoria, para que se vea que esta sincronizado
+    tarea.titulo(obj.titulo);
+}
+
+//funcion que ejecutar el contralador de tareas
+async function editarTareaCompleta(tarea) {
+    const data = JSON.stringify(tarea);
+    const respuesta = await fetch(`${urlTareas}/${tarea.id}`, {
+        method: 'PUT',
+        body: data,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!respuesta.ok) {
+        manejoErrorApi(respuesta);
+        //detendremos la ejecucion de cuaqluier cosa que este ocue=rriendo en la aplicación
+        throw "error";
+    }
+}
+
 //al finalizar la carga de la pagina, se incoara esta funcion de jquery
 $(function () {
     $("#reordenable").sortable({
