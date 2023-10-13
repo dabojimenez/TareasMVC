@@ -1,0 +1,36 @@
+﻿<div class="modal fade" id="modal-editar-tarea" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-editar-tarea-titulo" data-bind="text: titulo"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @* creamos una fila, que contendra una columna*@
+                <div class="row">
+                    @* una columna col-lg-9, que ocupe las tres cuartas partes del modal*@
+                    <div class="col-lg-9">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="textTituloCrearTarea" placeholder="Titulo" data-bind="value: titulo"/>
+                            <label for="textTituloCrearTarea">Título de la tarea</label>
+                        </div>
+                        <div class="mb-3">
+                            <label>Descripción</label>
+                            <textarea type="text" class="form-control" rows="4" data-bind="value: descripcion">
+
+                            </textarea>
+                        </div>
+                    </div>
+                    @* columna de botones *@
+                    <div class="col-lg-3">
+                        <button class="btn btn-secondary mb-2 w-100 text-start">
+                            @* icono de x *@
+                            <i class="bi bi-x-lg"></i>
+                            Borrar tarea
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

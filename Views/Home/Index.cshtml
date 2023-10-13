@@ -45,6 +45,10 @@
     </div>
 </div>
 
+@* vista parcial, que contiene el modal para mostrar la ifnromación*@
+<partial name="_ModalEditarTarea" />
+
+
 @section Scripts{
     @* //importamos la funcion que agrega la tarea usando javascript *@
     @* asp-append-version="true", para que siempre se actualice *@
@@ -55,6 +59,10 @@
     <script>
         //agregamos la direccion url
         const urlTareas = "/api/Tareas";
+        //agregamos el id, del modal para abrir con js
+        const modalEditarTarea = document.getElementById('modal-editar-tarea');
+        //creamos la instancia del modal
+        const modalEditarTareaBootstrap = new bootstrap.Modal(modalEditarTarea);
 
         // asiganamos un objeto a la varibales, y este objeto tiene su propiedad llamada tareas
         //la cual le estamos asiganndo un observable, que es un arreglo
@@ -121,6 +129,8 @@
         //aplicamos KNOCKOUTJS en la vista html usanod el id, debemos usar la palabra reservada
         //ko, que invoca a KNOCKOUTJS
         ko.applyBindings(tareaListadoViewModel, document.getElementById('contenedor-listado-tareas'));
+        //aplicamos el bind, para poder usar la data en el modal
+        ko.applyBindings(tareEditarViewModel, document.getElementById('modal-editar-tarea'));
     </script>
     
 }

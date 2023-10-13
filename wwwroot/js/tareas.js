@@ -152,10 +152,12 @@ async function manejarClickTarea(tarea) {
         return;
     }
 
-    const json = respuesta.json();
-    console.log(json);
+    const json = await respuesta.json();
 
     tareEditarViewModel.id = json.id;
     tareEditarViewModel.titulo(json.titulo);
     tareEditarViewModel.descripcion(json.descripcion);
+
+    //abriremso el modal para mostrar la ifnromación
+    modalEditarTareaBootstrap.show();
 }
