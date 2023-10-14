@@ -159,6 +159,49 @@ async function editarTareaCompleta(tarea) {
     }
 }
 
+//
+function intentarBorrarTarea(tarea) {
+    //ocultamos el modal, par ano tener dos modales abiertos
+    modalEditarTareaBootstrap.hide();
+    console.log(tarea.titulo())
+
+    confirmarAccion({
+        callBackAceptar: () => {
+            borrarTarea(tarea);
+        },
+        callBackCancelar: () => {
+            //mostraremso el modal nuevamente
+            modalEditarTareaBootstrap.show();
+        },
+        titulo: `Desea borrar: ${tarea.titulo()}?`
+    })
+}
+
+//funcion que borrara la tarea
+async function borrarTarea(tarea) {
+    const idTarea = tarea.id;
+    const respuesta = await fetch(
+        `${urlTareas}/${idTarea}`,
+        {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    );
+
+    if (respuesta.ok) {
+        //obtendremos el id de la tarea que esta siendo eliminada, para eliminar de ahi
+        const indice = obtenerIndiceTareaEnEdicion();
+        //elimiamos el elemento de tareas, ubicado en el arreglo de tareas, en el indice
+        tareaListadoViewModel.tareas.splice(indice, 1)
+    }
+}
+//obtenemos el id
+function obtenerIndiceTareaEnEdicion() {
+    return tareaListadoViewModel.tareas().findIndex(t => t.id() == tareEditarViewModel.id);
+}
+
 //al finalizar la carga de la pagina, se incoara esta funcion de jquery
 $(function () {
     $("#reordenable").sortable({

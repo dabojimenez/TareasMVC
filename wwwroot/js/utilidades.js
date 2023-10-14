@@ -31,3 +31,32 @@ function mostrarMensajeError(mensaje) {
         }
     );
 }
+
+//funcion para confirmar el borrado de una tarea
+//callBack, es una función que se le pasa como parametro a otra función, siendo esta llamada en un contexto determinado
+//esto si el usuario da en aceptar se ejecutara la funcion de aceptar y si da en cancelar, ejecutaremos la funcion cancelar
+//titulo, que le va a salir al usuario
+function confirmarAccion({ callBackAceptar, callBackCancelar, titulo }) {
+    Swal.fire(
+        {
+            title: titulo || '¿Realmente deseas hacer esto?',
+            icon: 'warning',
+            //mostraremos el boton de cancelar
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí',
+            focusConfirm: true
+        }
+    ).then(//funcion que se ejecutara al presiona aceptar o cancelar
+        (resultado) => {
+            //resultado, contiene si el usuario acepto o no
+            if (resultado.isConfirmed) {
+                callBackAceptar();
+            } else if (callBackCancelar) {
+                //el usuario preciono cancelar y si envio una funcion cancelar
+                callBackCancelar();
+            }
+        }
+    );
+}
