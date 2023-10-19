@@ -57,6 +57,33 @@ namespace TareasMVC.Controllers
             //retornamos el paso de donde vamos a sacar el id del paso
             return paso;
         }
+        //no colocamos el :int, ya que el id del paso es un GUID
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(Guid id, [FromBody] PasoCrearDTO pasoCrearDTO)
+        {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+
+            var paso = await context.Pasos
+                .Include(p => p.Tarea)//traeremos la data de la tarea, ya que en la tarea esta el id del usuario
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (paso is null)
+            {
+                return NotFound();
+            }
+
+            if (paso.Tarea.UsuarioCreacionId != usuarioId)
+            {
+                return Forbid();
+            }
+
+            paso.Descripcion = pasoCrearDTO.Descripcion;
+            paso.Realizado = pasoCrearDTO.realizado;
+
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
 
     }
 }

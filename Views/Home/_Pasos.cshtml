@@ -18,7 +18,8 @@
                 @* lo esconceremos si estamos en modo edicion, con hidden *@
                 @* css, permite agrega o quitar una clase de css *@
                 @* text-decoration-line-through, le atravesaremos una linea al texto, siempre y cuando la propiedad realizado sea verdadero *@
-                <span data-bind="text: descripcion, hidden: modoEdicion, 
+                <span style="cursor: pointer" data-bind="text: descripcion, hidden: modoEdicion, 
+                    click: manejarClickDescripcionPaso,
                     css:{'text-decoration-line-through': realizado}"></span>
                 @* en caso de estar en modo edicion mostraremos un texarea *@
                 <textarea name="txtPasoDescripcion" class="form-control" placeholder="Agrege una descripción"

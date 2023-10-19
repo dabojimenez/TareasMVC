@@ -16,7 +16,9 @@ function manejarClickCancelarPaso(paso) {
         //eliminamos el apso que nunca se creo
         tareEditarViewModel.pasos.pop();
     } else {
-
+        //cuando estamos en la fase de edicion, mostraemos el texto anterior cuando cancele
+        paso.modoEdicion(false);
+        paso.descripcion(paso.descripcionAnterior);
     }
 }
 //funcion para slavar el paso
@@ -26,10 +28,22 @@ async function manejarClickSalvarPaso(paso) {
     const idTarea = tareEditarViewModel.id;
     const data = obtenerCuerpoPeticionPaso(paso);
 
+    const descripcion = paso.descripcion();
+
+    //validamos de que en caso de tener una descripcion vacia, no se realizara la acción
+    if (!descripcion) {
+        paso.descripcion(paso.descripcionAnterior);
+        if (esNuevo) {
+            tareEditarViewModel.pasos.pop();
+        }
+        return;
+    }
+
     if (esNuevo) {
         insertarPaso(paso, data, idTarea);
     } else {
-        //actulizaremos
+        //actulizaremos el paso. (su descripcion)
+        actualizarPaso(data, paso.id());
     }
 }
 
@@ -60,6 +74,28 @@ async function insertarPaso(paso, data, idTarea) {
         paso.id(json.id);
     } else {
         //manejaremos el error con el modal
+        manejoErrorApi(respuesta);
+    }
+}
+
+function manejarClickDescripcionPaso(paso) {
+    paso.modoEdicion(true);
+    paso.descripcionAnterior = paso.descripcion();
+    $("[name=txtPasoDescripcion]:visible").focus();
+}
+
+async function actualizarPaso(data, id) {
+    const respuesta = await fetch(`${urlPasos}/${id}`,
+        {
+            body: data,
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    );
+
+    if (!respuesta.ok) {
         manejoErrorApi(respuesta);
     }
 }
