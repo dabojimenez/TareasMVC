@@ -99,3 +99,14 @@ async function actualizarPaso(data, id) {
         manejoErrorApi(respuesta);
     }
 }
+
+function manejarClickCheckboxPaso(paso) {
+    //retorno por defecto para marcar el check
+    if (paso.esNuevo()) {
+        return true;
+    } else {
+        const data = obtenerCuerpoPeticionPaso(paso);
+        actualizarPaso(data, paso.id());
+    }
+    return true;
+}
