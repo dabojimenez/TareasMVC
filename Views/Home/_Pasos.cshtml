@@ -16,7 +16,10 @@
             <div class="col-11">
                 @* span. contenedor del texto *@
                 @* lo esconceremos si estamos en modo edicion, con hidden *@
-                <span data-bind="text: descripcion, hidden: modoEdicion"></span>
+                @* css, permite agrega o quitar una clase de css *@
+                @* text-decoration-line-through, le atravesaremos una linea al texto, siempre y cuando la propiedad realizado sea verdadero *@
+                <span data-bind="text: descripcion, hidden: modoEdicion, 
+                    css:{'text-decoration-line-through': realizado}"></span>
                 @* en caso de estar en modo edicion mostraremos un texarea *@
                 <textarea name="txtPasoDescripcion" class="form-control" placeholder="Agrege una descripción"
                 data-bind="{value: descripcion, visible: modoEdicion}"></textarea>
