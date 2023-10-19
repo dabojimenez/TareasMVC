@@ -55,10 +55,13 @@
 
     <script src="~/js/utilidades.js" asp-append-version="true"></script>
     <script src="~/js/tareas.js" asp-append-version="true"></script>
+    <script src="~/js/pasos.js" asp-append-version="true"></script>
 
     <script>
         //agregamos la direccion url
         const urlTareas = "/api/Tareas";
+        //url para los pasos
+        const urlPasos = "/api/Pasos";
         //agregamos el id, del modal para abrir con js
         const modalEditarTarea = document.getElementById('modal-editar-tarea');
         //creamos la instancia del modal
@@ -110,7 +113,9 @@
         const tareEditarViewModel = {
             id: 0,//por defecto
             titulo: ko.observable(''),//valor por defecto
-            descripcion: ko.observable('')
+            descripcion: ko.observable(''),
+            //agregamos el arreglo de pasos, como valor inicial estara vacio
+            pasos: ko.observableArray([])
         }
 
         const tareaListadoViewModel = new tareaListadoViewModelFn();
@@ -125,6 +130,20 @@
 
         //invocamos la funcion d eobtener las atreas
         obtenerTareas();
+
+        //vm para crear los pasos
+        function pasoViewModel({ id, descripcion, realizado, modoEdicion }) {
+            var self = this;
+            self.id = ko.observable(id || 0);
+            self.descripcion = ko.observable(descripcion || '');
+            self.realizado = ko.observable(realizado);
+            self.modoEdicion = ko.observable(modoEdicion);
+            //funcion para en caso de que un paso sea nuevo
+            self.esNuevo = ko.pureComputed(function () {
+                return self.id() == 0;
+            })
+        }
+
 
         //aplicamos KNOCKOUTJS en la vista html usanod el id, debemos usar la palabra reservada
         //ko, que invoca a KNOCKOUTJS
