@@ -242,7 +242,17 @@ async function manejarClickTarea(tarea) {
     tareEditarViewModel.id = json.id;
     tareEditarViewModel.titulo(json.titulo);
     tareEditarViewModel.descripcion(json.descripcion);
-
+    //limpiamos los pasos existentes en memoria
+    tareEditarViewModel.pasos([]);
+    //agregamos el listado de pasos que nos viene en el json
+    json.pasos.forEach(paso => {
+        tareEditarViewModel.pasos.push(
+            new pasoViewModel({
+                ...paso,//destructuramos el objeto, para que se pase sus propiedades, para pasarle sus propiedades en el pasoviewmodel
+                modoEdicion: false
+            })
+        )
+    });
     //abriremso el modal para mostrar la ifnromación
     modalEditarTareaBootstrap.show();
 }

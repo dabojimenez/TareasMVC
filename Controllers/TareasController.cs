@@ -52,7 +52,10 @@ namespace TareasMVC.Controllers
         public async Task<ActionResult<Tarea>> Get(int id)
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            Tarea tarea = await context.Tareas.FirstOrDefaultAsync(t => t.Id == id
+            Tarea tarea = await context.Tareas
+                //similar a un join (include)
+                .Include(t => t.Pasos) //con esta función incluimos los pasos de la tarea, ya que la tarea tiene su propiedad de listado de pasos list<pasos>
+                .FirstOrDefaultAsync(t => t.Id == id
                                 && t.UsuarioCreacionId == usuarioId);
             if (tarea is null)
             {
