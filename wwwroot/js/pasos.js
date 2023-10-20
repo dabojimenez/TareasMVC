@@ -74,10 +74,16 @@ async function insertarPaso(paso, data, idTarea) {
         paso.id(json.id);
         //vamos a agregar un neuvo paso a pasos totales
         const tarea = obtenerTareaEnEdicion();
-        tarea.pasosTotal(tarea.pasosTotal() + 1);
+
+        // Convertir los valores actuales a números
+        const pasosTotal = parseInt(tarea.pasosTotal(), 10);
+        const pasosRealizados = parseInt(tarea.pasosRealizados(), 10);
+
+        // Incrementar los valores numéricos
+        tarea.pasosTotal(pasosTotal + 1);
         //si ese paso estaba realizado
         if (paso.realizado()) {
-            tarea.pasosRealizados(tarea.pasosRealizados() + 1);
+            tarea.pasosRealizados(pasosRealizados + 1);
         }
     } else {
         //manejaremos el error con el modal
