@@ -76,8 +76,11 @@ builder.Services.AddLocalization(opciones =>
 builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
 //agrrgamos la dependencia de automaper, indicancole que trabajara sobre el poryecto/assembly sobre el proyecto en el que estamos
 builder.Services.AddAutoMapper(typeof(Program));
-//implemetacion de la interface para subir archivos
-builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
+////implemetacion de la interface para subir archivos
+//Para usar almacenamiento en Azure
+//builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
+//Para usar almacenamiento de forma local
+builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocal>(); 
 
 var app = builder.Build();
 
