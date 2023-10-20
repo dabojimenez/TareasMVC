@@ -110,3 +110,40 @@ function manejarClickCheckboxPaso(paso) {
     }
     return true;
 }
+
+function manejarClickBorrarPaso(paso) {
+    //mostraremos la ventana de borrar
+    modalEditarTareaBootstrap.hide();
+    confirmarAccion(
+        {
+            callBackAceptar: () => {
+                borrarPaso(paso);
+                modalEditarTareaBootstrap.show();
+            },
+            callBackCancelar: () => {
+                //mostraremso el modal nuevamente
+                modalEditarTareaBootstrap.show();
+            },
+            titulo: `Desea borrar este paso => ${paso.descripcion()}?`
+        }
+    )
+}
+
+async function borrarPaso(paso) {
+    const respuesta = await fetch(`${urlPasos}/${paso.id()}`,
+        {
+            method: 'DELETE'
+        }
+    );
+
+    if (!respuesta.ok) {
+        manejoErrorApi(respuesta);
+        return;
+    }
+    //removemos del vm, el paso que se elimino
+    tareEditarViewModel.pasos.remove(
+        function (item) {
+            return item.id() == paso.id()
+        }
+    )
+}

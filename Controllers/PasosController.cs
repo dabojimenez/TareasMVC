@@ -85,5 +85,30 @@ namespace TareasMVC.Controllers
             return Ok();
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId().ToString();
+
+            Paso paso = await context.Pasos
+                .Include(p => p.Tarea)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (paso is null)
+            {
+                return NotFound();
+            }
+
+            if (paso.Tarea.UsuarioCreacionId != usuarioId)
+            {
+                return Forbid();
+            }
+            //marcamos la entidad como que va a ser borrada
+            context.Remove(paso);
+            //borramos la entidad o el paso
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+
     }
 }
