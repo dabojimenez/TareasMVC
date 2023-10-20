@@ -72,6 +72,13 @@ async function insertarPaso(paso, data, idTarea) {
     if (respuesta.ok) {
         const json = await respuesta.json();
         paso.id(json.id);
+        //vamos a agregar un neuvo paso a pasos totales
+        const tarea = obtenerTareaEnEdicion();
+        tarea.pasosTotal(tarea.pasosTotal() + 1);
+        //si ese paso estaba realizado
+        if (paso.realizado()) {
+            tarea.pasosRealizados(tarea.pasosRealizados() + 1);
+        }
     } else {
         //manejaremos el error con el modal
         manejoErrorApi(respuesta);
@@ -107,6 +114,19 @@ function manejarClickCheckboxPaso(paso) {
     } else {
         const data = obtenerCuerpoPeticionPaso(paso);
         actualizarPaso(data, paso.id());
+
+        const tarea = obtenerTareaEnEdicion();
+        let pasosRealizadosActual = tarea.pasosRealizados();
+        //verificamos si el paso esta siendo marcado o desmarcado
+        if (paso.realizado()) {
+            //si esta marcado, le sumamos uno
+            pasosRealizadosActual++;
+        } else {
+            //estamso desmarcando y le restamos uno
+            pasosRealizadosActual--;
+        }
+
+        tarea.pasosRealizados(pasosRealizadosActual);
     }
     return true;
 }
@@ -146,4 +166,12 @@ async function borrarPaso(paso) {
             return item.id() == paso.id()
         }
     )
+
+    const tarea = obtenerTareaEnEdicion();
+    tarea.pasosTotal(tarea.pasosTotal() - 1)
+    //si el baso borrado tambien estaba realizado
+    if (paso.realizado()) {
+        //restaremso uno 
+        tarea.pasosRealizados(tarea.pasosRealizados() - 1)
+    }
 }

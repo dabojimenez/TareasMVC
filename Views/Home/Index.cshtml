@@ -24,6 +24,12 @@
             @* tomaremos una propiedad de los elemtnos del arreglo *@
             <div data-bind="text: titulo, hidden: esNuevo" class="fw-bold">
             </div>
+            @* //agregamos los pasos relaizados, pasos totales y el porcentaje y solo sera visible cuando la tarea tenga mas de un paso *@
+            <div name="pasos-resumen" data-bind="visible: pasosTotal() > 0">
+                <span data-bind="text: pasosRealizados"></span> / 
+                <span data-bind="text: pasosTotal"></span>
+                <span data-bind="text: porcentajeCompletado"></span>
+            </div>
             @* attr:{'data-id': id}, : colocamos el id de la tarea en la caja de texto*@
             <input type="text" name="titulo-tarea" autocomplete="off"
                    data-bind="value: titulo, visible: esNuevo,
@@ -100,13 +106,23 @@
             })
         };
 
-        function tareaElementoListadoViewModel({ id, titulo }) {
+        function tareaElementoListadoViewModel({ id, titulo, pasosTotal, pasosRealizados }) {
             var self = this;
             self.id = ko.observable(id);
             self.titulo = ko.observable(titulo);
+            self.pasosTotal = ko.observable(pasosTotal);
+            self.pasosRealizados = ko.observable(pasosRealizados);
             self.esNuevo = ko.pureComputed(function () {
                 return self.id() == 0;
             })
+
+            self.porcentajeCompletado = ko.pureComputed(
+                function () {
+                    //multiplicamos por 1.0, para que sea de forma decimal
+                    const calculo = Math.round(self.pasosRealizados() * 1.0 / self.pasosTotal() * 100);
+                    return `(${calculo}%)`
+                }
+            )
         };
 
         //crearemos un nuevo viewmodel, para poder transportar la ifnormacion d ela tarea seleccionada

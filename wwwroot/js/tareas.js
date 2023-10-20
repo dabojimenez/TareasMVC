@@ -256,3 +256,9 @@ async function manejarClickTarea(tarea) {
     //abriremso el modal para mostrar la ifnromación
     modalEditarTareaBootstrap.show();
 }
+
+//funcion que usaremos para actualizar los pasos y el porcentaje de pasos realizados
+function obtenerTareaEnEdicion() {
+    const indice = obtenerIndiceTareaEnEdicion();
+    return tareaListadoViewModel.tareas()[indice];
+}
