@@ -2,11 +2,11 @@
     <i class="bi bi-paperclip"></i>
     Archivos adjuntos
 </label>
-<button onclick="manejarArchivoAdjunto()">
+<button onclick="manejarClickAgregarArchivoAdjunto()">
     <i class="bi bi-plus"></i>
 </button>
 @* multiple, para cargar multiples archivos *@
-<input type="file" id="archivoTarea" multiple style="display: none"/>
+<input type="file" id="archivoATarea" multiple style="display: none"/>
 
 @* se mostraran los distintos archvios adjuntos *@
 <div data-bind="foreach: archivosAdjuntos">
