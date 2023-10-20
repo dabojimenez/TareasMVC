@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TareasMVC.Entidades;
+using TareasMVC.Migrations;
 using TareasMVC.Models;
 using TareasMVC.Servicios;
 
@@ -110,5 +111,39 @@ namespace TareasMVC.Controllers
             return Ok();
         }
 
+        [HttpPost("ordenar/{tareaId:int}")]
+        public async Task<IActionResult> Ordenar(int tareaId, [FromBody] Guid[] ids)
+        {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+            Tarea tarea = await context.Tareas .FirstOrDefaultAsync(t => t.Id == tareaId && t.UsuarioCreacionId == usuarioId);
+            if (tarea == null)
+            {
+                return NotFound();
+            }
+            
+            var pasos = await context.Pasos.Where(x => x.TareaId == tareaId).ToListAsync();
+
+            var pasosId = pasos.Select(x => x.Id);
+
+            //revisamos que no nos falte ningun paso
+            var idsNoPertenecenALaTarea = ids.Except(pasosId).ToList();
+            //si hay alguno que no esta, retonramos bad
+            if (idsNoPertenecenALaTarea.Any())
+            {
+                return BadRequest("No todos los pasos estan presentes");
+            }
+            //transformamos a un diciconario, donde la key, sera el id del paso (guid)
+            var pasosDiccionario = pasos.ToDictionary(p => p.Id);
+
+            for (int i = 0; i < ids.Length; i++)
+            {
+                var pasoId = ids[i];
+                var paso = pasosDiccionario[pasoId];
+                paso.Orden = i + 1;
+            }
+
+            await context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }

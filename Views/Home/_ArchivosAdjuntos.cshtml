@@ -1,0 +1,21 @@
+﻿<label>
+    <i class="bi bi-paperclip"></i>
+    Archivos adjuntos
+</label>
+<button onclick="manejarArchivoAdjunto()">
+    <i class="bi bi-plus"></i>
+</button>
+@* multiple, para cargar multiples archivos *@
+<input type="file" id="archivoTarea" multiple style="display: none"/>
+
+@* se mostraran los distintos archvios adjuntos *@
+<div data-bind="foreach: archivosAdjuntos">
+    <div>
+        <div style="cursor: pointer" data-bind="text: titulo"></div>
+        <div>
+            Agregado <span data-bind="text: publicado"></span> - 
+            <span class="fw-bold" style="cursor: pointer">Borrar</span> - 
+            <span class="fw-bold" style="cursor: pointer">Descargar</span>
+        </div>
+    </div>
+</div>
