@@ -129,5 +129,5 @@ async function borrarArchivoAdjunto(archivoAdjunto) {
 }
 
 function manejarClickDescargarArchivoAdjunto(archivoAdjunto) {
-
+    descargarArchivo(archivoAdjunto.url, archivoAdjunto.titulo());
 }

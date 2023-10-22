@@ -60,3 +60,21 @@ function confirmarAccion({ callBackAceptar, callBackCancelar, titulo }) {
         }
     );
 }
+
+//funcion que servira para descregar archivos
+function descargarArchivo(url, nombre) {
+    //creramos un ancor en memoria, de forma tem,poral para decsrgar el archivo
+    var link = document.createElement('a');
+    link.download = nombre;
+    //para que el arhcivo se coleque en otra pestana
+    link.target = "_blank";
+    link.href = url;
+    //insertamos el ancor en el body de html
+    document.body.appendChild(link);
+    //le acemos click al ancor
+    link.click();
+    //removemos el ancor
+    document.body.removeChild(link);
+    //eliminamos el ancor creado
+    delete link;
+}
