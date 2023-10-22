@@ -6,7 +6,10 @@
     <i class="bi bi-plus"></i>
 </button>
 @* multiple, para cargar multiples archivos *@
-<input type="file" id="archivoATarea" multiple style="display: none"/>
+<input type="file" 
+    onchange="manejarSeleccionArchivoTarea(event)" 
+    id="archivoATarea" 
+    multiple style="display: none"/>
 
 @* se mostraran los distintos archvios adjuntos *@
 <div data-bind="foreach: archivosAdjuntos">

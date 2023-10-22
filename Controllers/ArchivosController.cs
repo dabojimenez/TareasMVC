@@ -13,7 +13,7 @@ namespace TareasMVC.Controllers
         private readonly ApplicationDbContextClass context;
         private readonly IAlmacenadorArchivos almacenadorArchivos;
         private readonly IServicioUsuarios servicioUsuarios;
-        private readonly string contenedor = "archivosAdjuntos";
+        private readonly string contenedor = "archivosadjuntos";
 
         public ArchivosController(ApplicationDbContextClass context, IAlmacenadorArchivos almacenadorArchivos,
             IServicioUsuarios servicioUsuarios)

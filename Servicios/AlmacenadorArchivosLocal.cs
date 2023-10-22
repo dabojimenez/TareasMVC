@@ -5,10 +5,10 @@ namespace TareasMVC.Servicios
     public class AlmacenadorArchivosLocal : IAlmacenadorArchivos
     {
         private readonly IWebHostEnvironment env;
-        private readonly HttpContextAccessor httpContextAccessor;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         public AlmacenadorArchivosLocal(IWebHostEnvironment env,
-            HttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor)
         {
             this.env = env;
             //para poder acceder al contexto de http

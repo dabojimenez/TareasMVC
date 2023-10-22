@@ -17,9 +17,17 @@ namespace TareasMVC.Servicios
         public async Task<AlmacenarArchivoResultado[]> Almacenar(string contenedor, IEnumerable<IFormFile> archivos)
         {
             //instanciar al ciente de azure storages
+            //contenedor, es como una carpeta
             var cliente = new BlobContainerClient(conecctionString, contenedor);
-            //si no existe lo creara
-            await cliente.CreateIfNotExistsAsync();
+            try
+            {
+                //si no existe lo creara
+                await cliente.CreateIfNotExistsAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+            }
             //la politica de acceso sera a nivel de blob, osea a nivel de archivo
             cliente.SetAccessPolicy(PublicAccessType.Blob);
             //el arreglo de archvios lo subiremos de forma simultanea

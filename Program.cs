@@ -78,9 +78,9 @@ builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
 builder.Services.AddAutoMapper(typeof(Program));
 ////implemetacion de la interface para subir archivos
 //Para usar almacenamiento en Azure
-//builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
+builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
 //Para usar almacenamiento de forma local
-builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocal>(); 
+//builder.Services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
 
 var app = builder.Build();
 
