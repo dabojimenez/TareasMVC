@@ -7,7 +7,6 @@ function manejarClickAgregarArchivoAdjunto() {
 }
 
 async function manejarSeleccionArchivoTarea(event) {
-    debugger;
     //accedermos a los archivios
     const archivos = event.target.files;
     //realizaremos un arreglo de archivos
@@ -36,7 +35,25 @@ async function manejarSeleccionArchivoTarea(event) {
     }
 
     const json = await respuesta.json();
-    console.log(json);
+    //colocamos en memoria los archivos
+    prepararArchivosAdjuntos(json);
 
     inputArchivoTarea.value = null;
+}
+
+//procesamiento de lsoa rhcivos adjuntos para mostrar
+function prepararArchivosAdjuntos(archivosAdjuntos) {
+    
+    archivosAdjuntos.forEach(archivoAdjunto => {
+        let fechaCreación = archivoAdjunto.fechaCreacion;
+        //si no contienen la Z, es porque no se esta expresdnaod como utc, pero en el sertvidor estamos suando utcnow, por tanto debemos colocar la z
+        if (archivoAdjunto.fechaCreacion.indexOf('Z') === -1) {
+            //LE AGREGAMOS LA Z
+            fechaCreación += 'Z';
+        }
+        const fechaCreacionDT = new Date(fechaCreación);
+        archivoAdjunto.publicado = fechaCreacionDT.toLocaleString();
+
+        tareEditarViewModel.archivosAdjuntos.push(new archivoAdjuntoViewModel({ ...archivoAdjunto, modoEdicion: false }))
+    });
 }

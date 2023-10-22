@@ -57,6 +57,8 @@ namespace TareasMVC.Controllers
                 .Include(t => t.Pasos //con esta función incluimos los pasos de la tarea, ya que la tarea tiene su propiedad de listado de pasos list<pasos>
                     .OrderBy(p => p.Orden) //ordenamos los pasos por elc ampo orden
                     )
+                //cargaremos la data relacionada de los archivos adjuntos
+                .Include( t => t.ArchivosAdjuntos.OrderBy(a => a.Orden))
                 .FirstOrDefaultAsync(t => t.Id == id
                                 && t.UsuarioCreacionId == usuarioId);
             if (tarea is null)

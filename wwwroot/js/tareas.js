@@ -254,6 +254,8 @@ async function manejarClickTarea(tarea) {
         )
     });
     //abriremso el modal para mostrar la ifnromación
+    //los archivos adjuntos preparados
+    prepararArchivosAdjuntos(json.archivosAdjuntos);
     modalEditarTareaBootstrap.show();
 }
 
