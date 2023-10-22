@@ -69,5 +69,30 @@ namespace TareasMVC.Controllers
             await context.SaveChangesAsync();
             return archivosAdjuntos.ToList();
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(Guid id, [FromBody] string titulo)
+        {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+            //traemos el arhcivo adjunto de la base de datos
+            var archivoAdjunto = await context.ArchivoAdjunto
+                .Include(a => a.Tarea)
+                .FirstOrDefaultAsync(a => a.Id == id);
+            if (archivoAdjunto == null)
+            {
+                return NotFound();
+            }
+
+            if (archivoAdjunto.Tarea.UsuarioCreacionId != usuarioId)
+            {
+                return Forbid();
+            }
+            //acctualizamos en memoria
+            archivoAdjunto.Titulo = titulo;
+            //salvamos el contexto, para cambiar en la base de datos
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }

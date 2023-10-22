@@ -57,3 +57,39 @@ function prepararArchivosAdjuntos(archivosAdjuntos) {
         tareEditarViewModel.archivosAdjuntos.push(new archivoAdjuntoViewModel({ ...archivoAdjunto, modoEdicion: false }))
     });
 }
+
+let tituloArchivoAdjuntoAnterior
+function manejarClickTituloArchivoAdjunto(archivoAdjunto) {
+    archivoAdjunto.modoEdicion(true);
+    tituloArchivoAdjuntoAnterior = archivoAdjunto.titulo();
+    //seleccionamos el nombre del arhcivo adjunto nuevo
+    $("[name='txtArchivoAdjuntoTitulo']:visible").focus();
+}
+
+async function manejarFocusoutTituloArchivoAdjunto(archivoAdjunto) {
+    archivoAdjunto.modoEdicion(false);
+    const idTarea = archivoAdjunto.id;
+
+    if (!archivoAdjunto.titulo()) {
+        archivoAdjunto.titulo(tituloArchivoAdjuntoAnterior);
+    }
+    if (archivoAdjunto.titulo() === tituloArchivoAdjuntoAnterior) {
+        return;
+    }
+
+    const data = JSON.stringify(archivoAdjunto.titulo());
+
+    const respuesta = await fetch(`${urlArchivos}/${idTarea}`,
+        {
+            body: data,
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    );
+
+    if (!respuesta.ok) {
+        manejoErrorApi(respuesta);
+    }
+}
