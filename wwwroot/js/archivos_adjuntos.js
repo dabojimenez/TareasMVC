@@ -93,3 +93,41 @@ async function manejarFocusoutTituloArchivoAdjunto(archivoAdjunto) {
         manejoErrorApi(respuesta);
     }
 }
+
+function manejarBorrarArchivoAdjunto(archivoAdjunto) {
+    modalEditarTareaBootstrap.hide();
+
+    confirmarAccion({
+        callBackAceptar: () => {
+            borrarArchivoAdjunto(archivoAdjunto);
+            modalEditarTareaBootstrap.show();
+        },
+        callBackCancelar: () => {
+            modalEditarTareaBootstrap.show();
+        },
+        titulo: '¿Desea borrar este archivo adjunto?'
+    });
+}
+
+async function borrarArchivoAdjunto(archivoAdjunto) {
+    
+    const respuesta = await fetch(`${urlArchivos}/${archivoAdjunto.id}`,
+        {
+            method: 'DELETE'
+        }
+    );
+
+    if (!respuesta.ok) {
+        manejoErrorApi(respuesta);
+        return;
+    }
+
+    //removemos del listado el arhcivo adjunto borrado
+    tareEditarViewModel.archivosAdjuntos.remove(function (item) {
+        return item.id == archivoAdjunto.id
+    });
+}
+
+function manejarClickDescargarArchivoAdjunto(archivoAdjunto) {
+
+}

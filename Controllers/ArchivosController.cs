@@ -94,5 +94,31 @@ namespace TareasMVC.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+
+            var archivo = await context.ArchivoAdjunto.Include(a => a.Tarea)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (archivo is null)
+            {
+                return NotFound();
+            }
+
+            if (archivo.Tarea.UsuarioCreacionId != usuarioId)
+            {
+                return Forbid();
+            }
+            //marcmaos la entidad en memoria como si fuera a ser borrada, a nivel de BBDD
+            context.Remove(archivo);
+            await context.SaveChangesAsync();
+            //borramos el archivo en el servidor
+            await almacenadorArchivos.Borrar(archivo.Url, contenedor);
+
+            return Ok();
+        }
     }
 }
